@@ -1,0 +1,44 @@
+{
+  "name": "todo-ui",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap-css": "^4.0.0-alpha.5",
+    "eslint-plugin-import": "^2.11.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-dropdown": "^1.4.0",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "lint": "eslint 'src/**/*.js'",
+    "lint:fix": "eslint 'src/**/*.js' --fix",
+    "prettier": "prettier --single-quote --write 'src/**/*.{js,jsx}'",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "bootstrap-css": "^4.0.0-alpha.5",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-jest": "^21.2.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-react": "^7.4.0",
+    "jest": "^22.4.2",
+    "prettier": "^1.10.2"
+  },
+  "proxy": {
+    "/todos": {
+      "target": "http://localhost:8000",
+      "xfwd": true,
+      "changeOrigin": true
+    }
+  }
+}
