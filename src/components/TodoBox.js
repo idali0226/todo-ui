@@ -2,7 +2,7 @@ import React from 'react'
 import 'bootstrap-css'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
-import Todo from './Todo'
+import TodoItem from './TodoItem'
 import CreateTodo from './CreateTodo'
 import '../app.css'
 
@@ -19,7 +19,7 @@ export default class TodoBox extends React.Component {
 
     this.deleteTodo = this.deleteTodo.bind(this)
     this.createTodo = this.createTodo.bind(this)
-    this.handleEditTodo = this.handleEditTodo.bind(this)
+    this.editTodo = this.editTodo.bind(this)
     this.onSelect = this.onSelect.bind(this)
     this.changeStatus = this.changeStatus.bind(this)
   }
@@ -53,20 +53,20 @@ export default class TodoBox extends React.Component {
   }
 
   getTodos() {
-    return this.state.todos.map(todo => {
+    return this.state.todos.map(todoItem => {
       return (
-        <Todo
-          {...todo}
-          key={todo.id}
+        <TodoItem
+          {...todoItem}
+          key={todoItem.id}
           onDelete={this.deleteTodo}
-          updateTodo={this.handleEditTodo}
+          updateTodo={this.editTodo}
           changeStatus={this.changeStatus}
         />
       )
     })
   }
 
-  handleEditTodo(id, name, description, status) {
+  editTodo(id, name, description, status) {
     const editedTodo = {
       id,
       name,
