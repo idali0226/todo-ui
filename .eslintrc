@@ -13,7 +13,10 @@
     "prettier"
   ],
   "globals": {
-    "fetch": false
+    "document": true,
+    "it": true,
+    "window": true,
+    "fetch": true
   },
   "parser": "babel-eslint",
   "rules": {
