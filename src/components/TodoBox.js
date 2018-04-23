@@ -14,6 +14,7 @@ export default class TodoBox extends React.Component {
     this.state = {
       todos: [],
       selectDefaultValue: 0,
+      hasError: false,
     }
 
     this.deleteTodo = this.deleteTodo.bind(this)
@@ -159,12 +160,19 @@ export default class TodoBox extends React.Component {
       )
   }
 
+  componentDidCatch() {
+    this.setState({ hasError: true })
+  }
+
   render() {
     const todoList = this.getTodos()
 
     const options = ['All', 'New', 'Done']
     const defaultOption = options[this.state.selectDefaultValue]
 
+    if (this.state.hasError) {
+      return <div>Error, something went wrong</div>
+    }
     return (
       <div className="row todo-container">
         <div className="cell">

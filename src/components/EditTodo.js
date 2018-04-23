@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TodoForm from './TodosForm'
+import TodoForm from './TodoForm'
 
 const propTypes = {
   id: PropTypes.number.isRequired,
