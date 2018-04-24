@@ -7,35 +7,20 @@ const propTypes = {
 }
 
 class CreateTodo extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isEdit: false,
-      id: 0,
-      name: '',
-      description: '',
-      status: '',
-    }
-
-    this.addTodo = this.addTodo.bind(this)
-  }
-
-  addTodo(name, description) {
+  createTodo(name, description) {
     this.props.createTodo(name, description)
   }
 
   render() {
-    const { id, name, description, status, isEdit } = this.state
     return (
       <div>
         <TodoForm
-          addTodo={this.addTodo}
-          isEdit={isEdit}
-          id={id}
-          name={name}
-          description={description}
-          status={status}
+          createTodo={this.props.createTodo}
+          isEdit={false}
+          id={0}
+          name=""
+          description=""
+          status=""
         />
       </div>
     )
