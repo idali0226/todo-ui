@@ -53,12 +53,13 @@ class TodoItem extends React.Component {
   }
 
   render() {
+    const { id, name, description, status } = this.props
     if (this.state.isEdit) {
       return (
         <EditTodo
-          id={this.props.id}
-          name={this.props.name}
-          description={this.props.description}
+          id={id}
+          name={name}
+          description={description}
           status={this.props.status}
           onEdit={this.onUpdate}
         />
@@ -66,10 +67,10 @@ class TodoItem extends React.Component {
     }
     return (
       <TodoView
-        id={this.props.id}
-        name={this.props.name}
-        description={this.props.description}
-        status={this.props.status}
+        id={id}
+        name={name}
+        description={description}
+        status={status}
         onDelete={this.onDelete}
         onEdit={this.onEdit}
         onStatusChange={this.onStatusChange}
