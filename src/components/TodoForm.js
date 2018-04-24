@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
-  addTodo: PropTypes.func,
+  createTodo: PropTypes.func,
   onUpdate: PropTypes.func,
   isEdit: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
@@ -12,7 +12,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-  addTodo: undefined,
+  createTodo: undefined,
   onUpdate: undefined,
 }
 
@@ -21,7 +21,7 @@ class TodosForm extends React.Component {
     super(props)
     this.state = {
       isEdit: this.props.isEdit,
-      id: this.props.isEdit ? this.props.id : '',
+      id: this.props.isEdit ? this.props.id : 0,
       name: this.props.isEdit ? this.props.name : '',
       description: this.props.isEdit ? this.props.description : '',
       status: this.props.isEdit ? this.props.status : 'New',
@@ -40,7 +40,7 @@ class TodosForm extends React.Component {
         isEdit: false,
       })
     } else {
-      this.props.addTodo(name, description)
+      this.props.createTodo(name, description)
 
       this.setState({
         name: '',
