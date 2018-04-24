@@ -40,7 +40,7 @@ class TodosForm extends React.Component {
         isEdit: false,
       })
     } else {
-      this.props.addTodo(this.state.name, this.state.description)
+      this.props.addTodo(name, description)
 
       this.setState({
         name: '',
@@ -51,10 +51,10 @@ class TodosForm extends React.Component {
   }
 
   render() {
-    const { description, name, status, buttonText } = this.state
+    const { description, name, status, buttonText, isEdit } = this.state
 
     let statusNode
-    if (this.state.isEdit) {
+    if (isEdit) {
       statusNode = (
         <input
           id="status"
