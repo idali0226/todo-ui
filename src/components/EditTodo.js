@@ -6,7 +6,8 @@ const propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  editTodo: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
+  onEdit: PropTypes.func.isRequired,
 }
 
 class EditTodo extends React.Component {
@@ -17,14 +18,14 @@ class EditTodo extends React.Component {
       id: this.props.id,
       name: this.props.name,
       description: this.props.description,
-      status: 'New',
+      status: this.props.status,
       isEdit: true,
     }
-    this.updateTodo = this.updateTodo.bind(this)
+    this.onUpdate = this.onUpdate.bind(this)
   }
 
-  updateTodo(id, name, description, status) {
-    this.props.editTodo(id, name, description, status)
+  onUpdate(id, name, description, status) {
+    this.props.onEdit(id, name, description, status)
   }
 
   render() {
@@ -36,7 +37,7 @@ class EditTodo extends React.Component {
           name={state.name}
           description={state.description}
           status={state.status}
-          editTodo={this.updateTodo}
+          onUpdate={this.onUpdate}
           isEdit={state.isEdit}
         />
       </div>

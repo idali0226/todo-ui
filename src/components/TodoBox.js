@@ -2,8 +2,8 @@ import React from 'react'
 import 'bootstrap-css'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
-import TodoItem from './TodoItem'
 import CreateTodo from './CreateTodo'
+import TodoList from './TodoList'
 import '../app.css'
 
 const API = 'http://localhost:3000/todos'
@@ -17,14 +17,14 @@ export default class TodoBox extends React.Component {
       hasError: false,
     }
 
-    this.deleteTodo = this.deleteTodo.bind(this)
+    this.onDelete = this.onDelete.bind(this)
     this.createTodo = this.createTodo.bind(this)
-    this.editTodo = this.editTodo.bind(this)
+    this.onUpdate = this.onUpdate.bind(this)
     this.onSelect = this.onSelect.bind(this)
-    this.changeStatus = this.changeStatus.bind(this)
+    this.onStatusChange = this.onStatusChange.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchTodos()
   }
 
@@ -41,32 +41,7 @@ export default class TodoBox extends React.Component {
     this.fetchTodos(value.value)
   }
 
-  getTodoTitle(todosCount) {
-    if (todosCount === 0) {
-      this.title = 'No todo items yet'
-    } else if (todosCount === 1) {
-      this.title = '1 todo item'
-    } else {
-      this.title = `${todosCount} todo items`
-    }
-    return this.title
-  }
-
-  getTodos() {
-    return this.state.todos.map(todoItem => {
-      return (
-        <TodoItem
-          {...todoItem}
-          key={todoItem.id}
-          onDelete={this.deleteTodo}
-          updateTodo={this.editTodo}
-          changeStatus={this.changeStatus}
-        />
-      )
-    })
-  }
-
-  editTodo(id, name, description, status) {
+  onUpdate(id, name, description, status) {
     const editedTodo = {
       id,
       name,
@@ -89,7 +64,7 @@ export default class TodoBox extends React.Component {
       })
   }
 
-  changeStatus(id, status) {
+  onStatusChange(id, status) {
     const editedTodo = {
       id,
       status,
@@ -108,6 +83,27 @@ export default class TodoBox extends React.Component {
       .then(() => {
         this.fetchTodos()
       })
+  }
+
+  onDelete(id) {
+    const options = {
+      method: 'DELETE',
+    }
+
+    fetch(`${API}/${id}`, options).then(() => {
+      this.fetchTodos()
+    })
+  }
+
+  getTodoTitle(todosCount) {
+    if (todosCount === 0) {
+      this.title = 'No todo items yet'
+    } else if (todosCount === 1) {
+      this.title = '1 todo item'
+    } else {
+      this.title = `${todosCount} todo items`
+    }
+    return this.title
   }
 
   createTodo(name, description) {
@@ -135,16 +131,6 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  deleteTodo(todo) {
-    const options = {
-      method: 'DELETE',
-    }
-
-    fetch(`${API}/${todo.props.id}`, options).then(() => {
-      this.fetchTodos()
-    })
-  }
-
   fetchTodos(value) {
     let url = API
     if (value !== undefined && value !== 'All') {
@@ -165,7 +151,7 @@ export default class TodoBox extends React.Component {
   }
 
   render() {
-    const todoList = this.getTodos()
+    const { state } = this
 
     const options = ['All', 'New', 'Done']
     const defaultOption = options[this.state.selectDefaultValue]
@@ -173,6 +159,8 @@ export default class TodoBox extends React.Component {
     if (this.state.hasError) {
       return <div>Error, something went wrong</div>
     }
+
+    //   if (this.state.todos.length > 0) {
     return (
       <div className="row todo-container">
         <div className="cell">
@@ -180,19 +168,26 @@ export default class TodoBox extends React.Component {
           <div className="todo">
             <CreateTodo createTodo={this.createTodo} />
             <hr />
-            <h3 className="todo-count">
-              TODO List [{this.getTodoTitle(todoList.length)}]
-            </h3>
+            <h3 className="todo-count">TODO List [{state.todos.length}]</h3>
             <Dropdown
               options={options}
               onChange={this.onSelect}
               value={defaultOption}
               placeholder="Select an option"
             />
-            <div>{todoList}</div>
+            <div>
+              <TodoList
+                todos={state.todos}
+                onUpdate={this.onUpdate}
+                onStatusChange={this.onStatusChange}
+                onDelete={this.onDelete}
+              />
+            </div>
           </div>
         </div>
       </div>
     )
+    //    }
+    //   return <div>Please wait...</div>
   }
 }

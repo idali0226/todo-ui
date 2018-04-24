@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const propTypes = {
   addTodo: PropTypes.func,
-  editTodo: PropTypes.func,
+  onUpdate: PropTypes.func,
   isEdit: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -13,7 +13,7 @@ const propTypes = {
 
 const defaultProps = {
   addTodo: undefined,
-  editTodo: undefined,
+  onUpdate: undefined,
 }
 
 class TodosForm extends React.Component {
@@ -32,13 +32,9 @@ class TodosForm extends React.Component {
   onSubmit = e => {
     e.preventDefault()
 
+    const { id, name, description, status } = this.state
     if (this.state.isEdit) {
-      this.props.editTodo(
-        this.state.id,
-        this.state.name,
-        this.state.description,
-        this.state.status
-      )
+      this.props.onUpdate(id, name, description, status)
 
       this.setState({
         isEdit: false,
@@ -55,7 +51,7 @@ class TodosForm extends React.Component {
   }
 
   render() {
-    const { state } = this
+    const { description, name, status, buttonText } = this.state
 
     let statusNode
     if (this.state.isEdit) {
@@ -63,7 +59,7 @@ class TodosForm extends React.Component {
         <input
           id="status"
           placeholder="Status"
-          value={state.status}
+          value={status}
           onChange={e => this.setState({ status: e.target.value })}
         />
       )
@@ -76,20 +72,20 @@ class TodosForm extends React.Component {
             <input
               id="name"
               placeholder="Name"
-              value={state.name}
+              value={name}
               onChange={e => this.setState({ name: e.target.value })}
             />
             <textarea
               id="description"
               placeholder="Description"
               onChange={e => this.setState({ description: e.target.value })}
-              value={state.description}
+              value={description}
             />
             {statusNode}
           </div>
 
           <div className="todo-form-actions">
-            <button type="submit">{this.state.buttonText}</button>
+            <button type="submit">{buttonText}</button>
           </div>
         </form>
       </div>
