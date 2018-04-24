@@ -29,16 +29,16 @@ class EditTodo extends React.Component {
   }
 
   render() {
-    const { state } = this
+    const { id, name, description, status, isEdit } = this.state
     return (
       <div>
         <TodoForm
-          id={state.id}
-          name={state.name}
-          description={state.description}
-          status={state.status}
+          id={id}
+          name={name}
+          description={description}
+          status={status}
           onUpdate={this.onUpdate}
-          isEdit={state.isEdit}
+          isEdit={isEdit}
         />
       </div>
     )
