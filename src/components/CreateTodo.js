@@ -26,16 +26,16 @@ class CreateTodo extends React.Component {
   }
 
   render() {
-    const { state } = this
+    const { id, name, description, status, isEdit } = this.state
     return (
       <div>
         <TodoForm
           addTodo={this.addTodo}
-          isEdit={state.isEdit}
-          id={state.id}
-          name={state.name}
-          description={state.description}
-          status={state.status}
+          isEdit={isEdit}
+          id={id}
+          name={name}
+          description={description}
+          status={status}
         />
       </div>
     )
