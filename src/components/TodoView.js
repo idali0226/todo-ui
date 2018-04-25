@@ -39,6 +39,7 @@ class TodoView extends React.Component {
   }
 
   onDelete() {
+  handleDelete() {
     this.props.onDelete(this.props.id)
   }
 
@@ -58,6 +59,7 @@ class TodoView extends React.Component {
           </p>
           <div className="todo-actions">
             <RemoveConfirmation onDelete={this.onDelete} />
+            <RemoveConfirmation onDelete={this.handleDelete} />
             <a href="" onClick={this.onEdit}>
               Edit
             </a>
