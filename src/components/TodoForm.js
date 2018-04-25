@@ -25,7 +25,6 @@ class TodosForm extends React.Component {
       name: this.props.isEdit ? this.props.name : '',
       description: this.props.isEdit ? this.props.description : '',
       status: this.props.isEdit ? this.props.status : 'New',
-      buttonText: this.props.isEdit ? 'Update' : 'Create TODO Item',
     }
   }
 
@@ -35,7 +34,6 @@ class TodosForm extends React.Component {
     const { id, name, description, status } = this.state
     if (this.state.isEdit) {
       this.props.onUpdate(id, name, description, status)
-
       this.setState({
         isEdit: false,
       })
@@ -45,14 +43,13 @@ class TodosForm extends React.Component {
       this.setState({
         name: '',
         description: '',
-        isEdit: false,
       })
     }
   }
 
   render() {
-    const { description, name, status, buttonText, isEdit } = this.state
-
+    const { description, name, status, isEdit } = this.state
+    const buttonText = isEdit ? 'Update' : 'Create TODO Item'
     let statusNode
     if (isEdit) {
       statusNode = (
