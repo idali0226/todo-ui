@@ -124,7 +124,6 @@ export default class TodoBox extends React.Component {
     this.setState({
       currentFilter: 'All',
     })
-    console.log(this.state.currentFilter)
   }
 
   fetchTodos(value) {
@@ -161,7 +160,7 @@ export default class TodoBox extends React.Component {
             <hr />
             <h3 className="todo-count">TODO List [{todos.length}]</h3>
             <Filter
-              handleFilterUpdate={this.handleFilterUpdate}
+              onFilterUpdate={this.handleFilterUpdate}
               currentFilter={currentFilter}
             />
             <div>
