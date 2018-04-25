@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Dropdown from 'react-dropdown'
 
 const propTypes = {
-  handleFilterUpdate: PropTypes.func.isRequired,
+  onFilterUpdate: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
 }
 
@@ -24,12 +24,6 @@ class Filter extends React.Component {
     this.state = {
       currentFilter: props.currentFilter,
     }
-
-    this.handleFilterUpdate = this.handleFilterUpdate.bind(this)
-  }
-
-  handleFilterUpdate(value) {
-    this.props.handleFilterUpdate(value)
   }
 
   render() {
@@ -40,7 +34,7 @@ class Filter extends React.Component {
       <div>
         <Dropdown
           options={filterOptions}
-          onChange={this.handleFilterUpdate}
+          onChange={this.props.onFilterUpdate}
           value={currentFilter}
           placeholder="Select an option"
         />
