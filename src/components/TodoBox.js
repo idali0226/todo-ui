@@ -1,9 +1,9 @@
 import React from 'react'
 import 'bootstrap-css'
-import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import CreateTodo from './CreateTodo'
 import TodoList from './TodoList'
+import Filter from './Filter'
 import '../app.css'
 
 const API = 'http://localhost:3000/todos'
@@ -13,32 +13,19 @@ export default class TodoBox extends React.Component {
     super()
     this.state = {
       todos: [],
-      selectDefaultValue: 0,
+      currentFilter: 'All',
       hasError: false,
     }
 
     this.onDelete = this.onDelete.bind(this)
     this.createTodo = this.createTodo.bind(this)
     this.onUpdate = this.onUpdate.bind(this)
-    this.onSelect = this.onSelect.bind(this)
+    this.handleFilterUpdate = this.handleFilterUpdate.bind(this)
     this.onStatusChange = this.onStatusChange.bind(this)
   }
 
   componentDidMount() {
     this.fetchTodos()
-  }
-
-  onSelect(value) {
-    let index = 0
-    if (value.value === 'New') {
-      index = 1
-    } else if (value.value === 'Done') {
-      index = 2
-    }
-    this.setState({
-      selectDefaultValue: index,
-    })
-    this.fetchTodos(value.value)
   }
 
   onUpdate(id, name, description, status) {
@@ -106,6 +93,14 @@ export default class TodoBox extends React.Component {
     return this.title
   }
 
+  handleFilterUpdate(value) {
+    this.fetchTodos(value.value)
+
+    this.setState({
+      currentFilter: value.value,
+    })
+  }
+
   createTodo(name, description) {
     const newTodo = {
       name,
@@ -127,7 +122,7 @@ export default class TodoBox extends React.Component {
     })
 
     this.setState({
-      selectDefaultValue: 0,
+      currentFilter: 'All',
     })
   }
 
@@ -151,16 +146,11 @@ export default class TodoBox extends React.Component {
   }
 
   render() {
-    const { state } = this
-
-    const options = ['All', 'New', 'Done']
-    const defaultOption = options[this.state.selectDefaultValue]
+    const { todos, currentFilter } = this.state
 
     if (this.state.hasError) {
       return <div>Error, something went wrong</div>
     }
-
-    //   if (this.state.todos.length > 0) {
     return (
       <div className="row todo-container">
         <div className="cell">
@@ -168,16 +158,14 @@ export default class TodoBox extends React.Component {
           <div className="todo">
             <CreateTodo createTodo={this.createTodo} />
             <hr />
-            <h3 className="todo-count">TODO List [{state.todos.length}]</h3>
-            <Dropdown
-              options={options}
-              onChange={this.onSelect}
-              value={defaultOption}
-              placeholder="Select an option"
+            <h3 className="todo-count">TODO List [{todos.length}]</h3>
+            <Filter
+              onFilterUpdate={this.handleFilterUpdate}
+              currentFilter={currentFilter}
             />
             <div>
               <TodoList
-                todos={state.todos}
+                todos={todos}
                 onUpdate={this.onUpdate}
                 onStatusChange={this.onStatusChange}
                 onDelete={this.onDelete}
@@ -187,7 +175,5 @@ export default class TodoBox extends React.Component {
         </div>
       </div>
     )
-    //    }
-    //   return <div>Please wait...</div>
   }
 }
