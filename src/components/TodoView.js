@@ -5,11 +5,15 @@ import RemoveConfirmation from './RemoveConfirmation'
 const propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   status: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+}
+
+const defaultProps = {
+  description: '',
 }
 
 class TodoView extends React.Component {
@@ -65,4 +69,6 @@ class TodoView extends React.Component {
 }
 
 TodoView.propTypes = propTypes
+TodoView.defaultProps = defaultProps
+
 export default TodoView
