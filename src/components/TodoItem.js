@@ -4,13 +4,23 @@ import TodoView from './TodoView'
 import EditTodo from './EditTodo'
 
 const propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onStatusChange: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  description: PropTypes.string,
+  status: PropTypes.string,
+  onDelete: PropTypes.func,
+  onUpdate: PropTypes.func,
+  onStatusChange: PropTypes.func,
+}
+
+const defaultProps = {
+  id: 0,
+  name: '',
+  description: '',
+  status: '',
+  onDelete: undefined,
+  onUpdate: undefined,
+  onStatusChange: undefined,
 }
 
 class TodoItem extends React.Component {
@@ -80,5 +90,6 @@ class TodoItem extends React.Component {
 }
 
 TodoItem.propTypes = propTypes
+TodoItem.defaultProps = defaultProps
 
 export default TodoItem
