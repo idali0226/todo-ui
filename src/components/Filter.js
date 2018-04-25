@@ -33,6 +33,7 @@ class Filter extends React.Component {
   }
 
   render() {
+    const { currentFilter } = this.state
     const filterOptions = ['All', 'New', 'Done']
 
     return (
@@ -40,7 +41,7 @@ class Filter extends React.Component {
         <Dropdown
           options={filterOptions}
           onChange={this.handleFilterUpdate}
-          value={this.state.currentFilter}
+          value={currentFilter}
           placeholder="Select an option"
         />
       </div>
