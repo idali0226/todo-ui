@@ -33,12 +33,12 @@ class TodosForm extends React.Component {
 
     const { id, name, description, status } = this.state
     if (this.state.isEdit) {
-      this.props.onUpdate(id, name, description, status)
+      this.props.onUpdate({ id, name, description, status })
       this.setState({
         isEdit: false,
       })
     } else {
-      this.props.createTodo(name, description)
+      this.props.createTodo({ name, description })
 
       this.setState({
         name: '',

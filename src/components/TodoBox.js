@@ -28,7 +28,7 @@ export default class TodoBox extends React.Component {
     this.fetchTodos()
   }
 
-  onUpdate(id, name, description, status) {
+  onUpdate({ id, name, description, status }) {
     const editedTodo = {
       id,
       name,
@@ -101,7 +101,7 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  createTodo(name, description) {
+  createTodo({ name, description }) {
     const newTodo = {
       name,
       description,
