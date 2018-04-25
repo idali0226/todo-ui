@@ -163,14 +163,13 @@ export default class TodoBox extends React.Component {
               onFilterUpdate={this.handleFilterUpdate}
               currentFilter={currentFilter}
             />
-            <div>
-              <TodoList
-                todos={todos}
-                onUpdate={this.onUpdate}
-                onStatusChange={this.onStatusChange}
-                onDelete={this.onDelete}
-              />
-            </div>
+
+            <TodoList
+              todos={todos}
+              onUpdate={this.onUpdate}
+              onStatusChange={this.onStatusChange}
+              onDelete={this.onDelete}
+            />
           </div>
         </div>
       </div>
