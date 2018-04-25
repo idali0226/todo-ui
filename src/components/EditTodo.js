@@ -11,25 +11,8 @@ const propTypes = {
 }
 
 class EditTodo extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      id: this.props.id,
-      name: this.props.name,
-      description: this.props.description,
-      status: this.props.status,
-      isEdit: true,
-    }
-    this.onUpdate = this.onUpdate.bind(this)
-  }
-
-  onUpdate(id, name, description, status) {
-    this.props.onEdit(id, name, description, status)
-  }
-
   render() {
-    const { id, name, description, status, isEdit } = this.state
+    const { id, name, description, status } = this.props
     return (
       <div>
         <TodoForm
@@ -37,8 +20,8 @@ class EditTodo extends React.Component {
           name={name}
           description={description}
           status={status}
-          onUpdate={this.onUpdate}
-          isEdit={isEdit}
+          onUpdate={this.props.onEdit}
+          isEdit
         />
       </div>
     )

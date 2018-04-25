@@ -7,10 +7,6 @@ const propTypes = {
 }
 
 class CreateTodo extends React.Component {
-  createTodo(name, description) {
-    this.props.createTodo(name, description)
-  }
-
   render() {
     return (
       <div>
@@ -27,5 +23,4 @@ class CreateTodo extends React.Component {
   }
 }
 CreateTodo.propTypes = propTypes
-
 export default CreateTodo
