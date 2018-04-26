@@ -3,17 +3,20 @@ import PropTypes from 'prop-types'
 import RemoveConfirmation from './RemoveConfirmation'
 
 const propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
   description: PropTypes.string,
-  status: PropTypes.string.isRequired,
+  status: PropTypes.string,
   onDelete: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
 }
 
 const defaultProps = {
-  description: '',
+  id: undefined,
+  name: undefined,
+  description: undefined,
+  status: undefined,
 }
 
 class TodoView extends React.Component {
