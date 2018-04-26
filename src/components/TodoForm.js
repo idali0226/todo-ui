@@ -14,6 +14,7 @@ const propTypes = {
 const defaultProps = {
   id: undefined,
   name: '',
+  description: '',
   status: '',
   createTodo: undefined,
   onUpdate: undefined,
@@ -24,7 +25,6 @@ class TodosForm extends React.Component {
     super(props)
     this.state = {
       isEdit: this.props.isEdit,
-      id: this.props.isEdit ? this.props.id : 0,
       id: this.props.isEdit ? this.props.id : undefined,
       name: this.props.isEdit ? this.props.name : '',
       description: this.props.isEdit ? this.props.description : '',
