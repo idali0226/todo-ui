@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
-  addTodo: PropTypes.func,
-  editTodo: PropTypes.func,
+  createTodo: PropTypes.func,
+  onUpdate: PropTypes.func,
   isEdit: PropTypes.bool.isRequired,
   id: PropTypes.number,
   name: PropTypes.string,
@@ -12,12 +12,12 @@ const propTypes = {
 }
 
 const defaultProps = {
-  addTodo: PropTypes.func,
-  editTodo: PropTypes.func,
-  id: PropTypes.number,
-  name: PropTypes.string,
-  description: PropTypes.string,
-  status: PropTypes.string,
+  id: undefined,
+  name: '',
+  description: '',
+  status: '',
+  createTodo: undefined,
+  onUpdate: undefined,
 }
 
 class TodosForm extends React.Component {
@@ -25,49 +25,42 @@ class TodosForm extends React.Component {
     super(props)
     this.state = {
       isEdit: this.props.isEdit,
-      id: this.props.isEdit ? this.props.id : '',
+      id: this.props.isEdit ? this.props.id : undefined,
       name: this.props.isEdit ? this.props.name : '',
       description: this.props.isEdit ? this.props.description : '',
       status: this.props.isEdit ? this.props.status : 'New',
-      buttonText: this.props.isEdit ? 'Update' : 'Create TODO Item',
     }
   }
 
   onSubmit = e => {
     e.preventDefault()
 
+    const { id, name, description, status } = this.state
     if (this.state.isEdit) {
-      this.props.editTodo(
-        this.state.id,
-        this.state.name,
-        this.state.description,
-        this.state.status
-      )
-
+      this.props.onUpdate({ id, name, description, status })
       this.setState({
         isEdit: false,
       })
     } else {
-      this.props.addTodo(this.state.name, this.state.description)
+      this.props.createTodo({ name, description })
 
       this.setState({
         name: '',
         description: '',
-        isEdit: false,
       })
     }
   }
 
   render() {
-    const { state } = this
-
+    const { description, name, status, isEdit } = this.state
+    const buttonText = isEdit ? 'Update' : 'Create TODO Item'
     let statusNode
-    if (this.state.isEdit) {
+    if (isEdit) {
       statusNode = (
         <input
           id="status"
           placeholder="Status"
-          value={state.status}
+          value={status}
           onChange={e => this.setState({ status: e.target.value })}
         />
       )
@@ -80,20 +73,20 @@ class TodosForm extends React.Component {
             <input
               id="name"
               placeholder="Name"
-              value={state.name}
+              value={name}
               onChange={e => this.setState({ name: e.target.value })}
             />
             <textarea
               id="description"
               placeholder="Description"
               onChange={e => this.setState({ description: e.target.value })}
-              value={state.description}
+              value={description}
             />
             {statusNode}
           </div>
 
           <div className="todo-form-actions">
-            <button type="submit">{this.state.buttonText}</button>
+            <button type="submit">{buttonText}</button>
           </div>
         </form>
       </div>
