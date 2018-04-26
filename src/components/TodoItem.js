@@ -14,7 +14,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-  id: 0,
+  id: undefined,
   name: '',
   description: '',
   status: '',
