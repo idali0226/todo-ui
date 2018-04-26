@@ -5,13 +5,16 @@ const propTypes = {
   createTodo: PropTypes.func,
   onUpdate: PropTypes.func,
   isEdit: PropTypes.bool.isRequired,
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  description: PropTypes.string,
+  status: PropTypes.string,
 }
 
 const defaultProps = {
+  id: undefined,
+  name: '',
+  status: '',
   createTodo: undefined,
   onUpdate: undefined,
 }
@@ -22,6 +25,7 @@ class TodosForm extends React.Component {
     this.state = {
       isEdit: this.props.isEdit,
       id: this.props.isEdit ? this.props.id : 0,
+      id: this.props.isEdit ? this.props.id : undefined,
       name: this.props.isEdit ? this.props.name : '',
       description: this.props.isEdit ? this.props.description : '',
       status: this.props.isEdit ? this.props.status : 'New',
