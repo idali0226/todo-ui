@@ -17,18 +17,18 @@ export default class TodoBox extends React.Component {
       hasError: false,
     }
 
-    this.onDelete = this.onDelete.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
     this.createTodo = this.createTodo.bind(this)
-    this.onUpdate = this.onUpdate.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
     this.handleFilterUpdate = this.handleFilterUpdate.bind(this)
-    this.onStatusChange = this.onStatusChange.bind(this)
+    this.handleStatusChange = this.handleStatusChange.bind(this)
   }
 
   componentDidMount() {
     this.fetchTodos()
   }
 
-  onUpdate({ id, name, description, status }) {
+  handleUpdate({ id, name, description, status }) {
     const editedTodo = {
       id,
       name,
@@ -51,7 +51,7 @@ export default class TodoBox extends React.Component {
       })
   }
 
-  onStatusChange(id, status) {
+  handleStatusChange(id, status) {
     const editedTodo = {
       id,
       status,
@@ -72,7 +72,7 @@ export default class TodoBox extends React.Component {
       })
   }
 
-  onDelete(id) {
+  handleDelete(id) {
     const options = {
       method: 'DELETE',
     }
@@ -93,11 +93,11 @@ export default class TodoBox extends React.Component {
     return this.title
   }
 
-  handleFilterUpdate(value) {
-    this.fetchTodos(value.value)
+  handleFilterUpdate({ value }) {
+    this.fetchTodos(value)
 
     this.setState({
-      currentFilter: value.value,
+      currentFilter: value,
     })
   }
 
@@ -166,9 +166,9 @@ export default class TodoBox extends React.Component {
 
             <TodoList
               todos={todos}
-              onUpdate={this.onUpdate}
-              onStatusChange={this.onStatusChange}
-              onDelete={this.onDelete}
+              onUpdate={this.handleUpdate}
+              onStatusChange={this.handleStatusChange}
+              onDelete={this.handleDelete}
             />
           </div>
         </div>
