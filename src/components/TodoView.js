@@ -48,7 +48,7 @@ class TodoView extends React.Component {
       <div className="todo-list">
         <div className="todo-actions">
           <p className="todo-header">{name}</p>
-          <p className="todo-body">{description}</p>
+          {description && <p className="todo-body">{description}</p>}
           <p className="todo-status">
             {status}
             {'   '}
