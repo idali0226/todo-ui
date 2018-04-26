@@ -50,8 +50,8 @@ class TodoItem extends React.Component {
     })
   }
 
-  onDelete(id) {
-    this.props.onDelete(id)
+  onDelete() {
+    this.props.onDelete(this.props.id)
   }
 
   onStatusChange(id, newStatus) {
@@ -70,7 +70,7 @@ class TodoItem extends React.Component {
           id={id}
           name={name}
           description={description}
-          status={this.props.status}
+          status={status}
           onEdit={this.onUpdate}
         />
       )

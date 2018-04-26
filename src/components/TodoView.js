@@ -23,7 +23,6 @@ class TodoView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.handleDelete = this.handleDelete.bind(this)
     this.onEdit = this.onEdit.bind(this)
     this.onStatusChange = this.onStatusChange.bind(this)
   }
@@ -41,10 +40,6 @@ class TodoView extends React.Component {
     this.props.onEdit()
   }
 
-  handleDelete() {
-    this.props.onDelete(this.props.id)
-  }
-
   render() {
     const { description, name, status } = this.props
     return (
@@ -60,7 +55,7 @@ class TodoView extends React.Component {
             </a>
           </p>
           <div className="todo-actions">
-            <RemoveConfirmation onDelete={this.handleDelete} />
+            <RemoveConfirmation onDelete={this.props.onDelete} />
             <a href="" onClick={this.onEdit}>
               Edit
             </a>
