@@ -10,14 +10,7 @@ class CreateTodo extends React.Component {
   render() {
     return (
       <div>
-        <TodoForm
-          createTodo={this.props.createTodo}
-          isEdit={false}
-          id={0}
-          name=""
-          description=""
-          status=""
-        />
+        <TodoForm createTodo={this.props.createTodo} isEdit={false} />
       </div>
     )
   }
