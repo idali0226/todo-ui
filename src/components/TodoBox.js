@@ -7,6 +7,7 @@ import Filter from './Filter'
 import '../app.css'
 
 const API = 'http://localhost:3000/todos'
+const UserAPI = 'http://localhost:3000/users'
 
 export default class TodoBox extends React.Component {
   constructor() {
@@ -14,18 +15,23 @@ export default class TodoBox extends React.Component {
     this.state = {
       todos: [],
       currentFilter: 'All',
+      currentUserFilter: 'All',
       hasError: false,
+      userFilterOptions: [],
+      statusFilterOptions: ['All', 'New', 'Done'],
     }
 
     this.handleDelete = this.handleDelete.bind(this)
     this.createTodo = this.createTodo.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.handleFilterUpdate = this.handleFilterUpdate.bind(this)
+    this.handleUserFilterUpdate = this.handleUserFilterUpdate.bind(this)
     this.handleStatusChange = this.handleStatusChange.bind(this)
   }
 
   componentDidMount() {
     this.fetchTodos()
+    this.fetchUsers()
   }
 
   handleUpdate({ id, name, description, status }) {
@@ -101,6 +107,13 @@ export default class TodoBox extends React.Component {
     })
   }
 
+  handleUserFilterUpdate({ value }) {
+    console.log(value)
+    this.setState({
+      currentUserFilter: value,
+    })
+  }
+
   createTodo({ name, description }) {
     const newTodo = {
       name,
@@ -141,13 +154,30 @@ export default class TodoBox extends React.Component {
       )
   }
 
+  fetchUsers() {
+    fetch(`${UserAPI}`)
+      .then(response => response.json())
+      .then(data =>
+        this.setState({
+          userFilterOptions: ['All'].concat(data.map(value => value.name)),
+        })
+      )
+  }
+
   componentDidCatch() {
     this.setState({ hasError: true })
   }
 
   render() {
-    const { todos, currentFilter } = this.state
+    const {
+      todos,
+      userFilterOptions,
+      currentFilter,
+      currentUserFilter,
+      statusFilterOptions,
+    } = this.state
 
+    console.log(userFilterOptions)
     if (this.state.hasError) {
       return <div>Error, something went wrong</div>
     }
@@ -155,6 +185,13 @@ export default class TodoBox extends React.Component {
       <div className="row todo-container">
         <div className="cell">
           <h2>Todo App</h2>
+          <h4>Users</h4>
+          <Filter
+            users={userFilterOptions}
+            onFilterUpdate={this.handleUserFilterUpdate}
+            currentFilter={currentUserFilter}
+            filterOptions={userFilterOptions}
+          />
           <div className="todo">
             <CreateTodo createTodo={this.createTodo} />
             <hr />
@@ -162,6 +199,7 @@ export default class TodoBox extends React.Component {
             <Filter
               onFilterUpdate={this.handleFilterUpdate}
               currentFilter={currentFilter}
+              filterOptions={statusFilterOptions}
             />
 
             <TodoList

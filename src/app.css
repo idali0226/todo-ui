@@ -66,6 +66,12 @@ h3 {
   text-transform: uppercase;
 }
 
+h4 {
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
 p {
   margin-bottom: 20px;
   margin-top: 0;

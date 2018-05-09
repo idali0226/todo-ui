@@ -15,6 +15,12 @@ class Filter extends React.Component {
       }
     }
 
+    if (nextProps.users !== prevState.users) {
+      return {
+        filterOptions: nextProps.users,
+      }
+    }
+
     // No state update necessary
     return null
   }
@@ -23,12 +29,13 @@ class Filter extends React.Component {
     super(props)
     this.state = {
       currentFilter: props.currentFilter,
+      filterOptions: props.filterOptions,
+      users: props.users,
     }
   }
 
   render() {
-    const { currentFilter } = this.state
-    const filterOptions = ['All', 'New', 'Done']
+    const { currentFilter, filterOptions, users } = this.state
 
     return (
       <div>
