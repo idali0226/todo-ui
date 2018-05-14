@@ -121,11 +121,9 @@ export default class TodoBox extends React.Component {
     })
     const userId = this.getCurrentUserId(value)
     this.fetchTodos(currentFilter, userId)
-    //    this.setTodosFromUserName(value, currentFilter)
   }
 
   getCurrentUserId(value) {
-    console.log(value)
     if (value !== 'All') {
       return this.state.users.filter(user => user.name === value).map(user => {
         return user.id
@@ -134,10 +132,13 @@ export default class TodoBox extends React.Component {
   }
 
   createTodo({ name, description }) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)[0]
+
     const newTodo = {
       name,
       description,
       status: 'New',
+      userId: userId,
     }
 
     const options = {
@@ -150,18 +151,16 @@ export default class TodoBox extends React.Component {
 
     fetch(API, options).then(res => {
       res.json()
-      this.fetchTodos()
+      this.fetchTodos('New', userId)
     })
 
     this.setState({
-      currentFilter: 'All',
+      currentStatusFilter: 'New',
     })
   }
 
   fetchTodos(status, usreId) {
     let url = API
-
-    console.log('fetchTodos', status, usreId)
     let query
     if (status !== 'All' && status !== undefined) {
       query = `status=${status}`
@@ -177,7 +176,6 @@ export default class TodoBox extends React.Component {
     if (query) {
       url = `${API}/search?${query}`
     }
-    console.log(url)
     fetch(url)
       .then(response => response.json())
       .then(data =>
