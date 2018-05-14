@@ -35,14 +35,13 @@ export default class TodoBox extends React.Component {
     this.fetchUsers()
   }
 
-  handleUpdate({ id, name, description, status }) {
+  handleUpdate({ id, name, description, capitalrizedStatus }) {
     const editedTodo = {
       id,
       name,
       description,
-      status,
+      status: capitalrizedStatus,
     }
-
     const options = {
       method: 'PUT',
       body: JSON.stringify(editedTodo),
@@ -51,10 +50,13 @@ export default class TodoBox extends React.Component {
       },
     }
 
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+    const currentStatus = this.state.currentStatusFilter
+
     fetch(`${API}/${id}`, options)
       .then(response => response.json())
       .then(() => {
-        this.fetchTodos()
+        this.fetchTodos(currentStatus, userId)
       })
   }
 
