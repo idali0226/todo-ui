@@ -45,7 +45,6 @@ class TodoList extends React.Component {
   }
 
   onUpdate(id, name, description, capitalrizedStatus) {
-    console.log(id, name, description, capitalrizedStatus)
     this.props.onUpdate(id, name, description, capitalrizedStatus)
   }
 
