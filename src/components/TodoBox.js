@@ -4,6 +4,7 @@ import 'react-dropdown/style.css'
 import CreateTodo from './CreateTodo'
 import TodoList from './TodoList'
 import Filter from './Filter'
+import CreateUser from './CreateUser'
 import '../app.css'
 
 const API = 'http://localhost:3000/todos'
@@ -28,6 +29,7 @@ export default class TodoBox extends React.Component {
     this.handleStatusFilterUpdate = this.handleStatusFilterUpdate.bind(this)
     this.handleUserFilterUpdate = this.handleUserFilterUpdate.bind(this)
     this.handleStatusChange = this.handleStatusChange.bind(this)
+    this.createUser = this.createUser.bind(this)
   }
 
   componentDidMount() {
@@ -36,6 +38,8 @@ export default class TodoBox extends React.Component {
   }
 
   handleUpdate({ id, name, description, capitalrizedStatus }) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+    const currentStatus = this.state.currentStatusFilter
     const editedTodo = {
       id,
       name,
@@ -49,9 +53,6 @@ export default class TodoBox extends React.Component {
         'Content-Type': 'application/json',
       },
     }
-
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    const currentStatus = this.state.currentStatusFilter
 
     fetch(`${API}/${id}`, options)
       .then(response => response.json())
@@ -85,12 +86,15 @@ export default class TodoBox extends React.Component {
   }
 
   handleDelete(id) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+    const currentStatus = this.state.currentStatusFilter
+
     const options = {
       method: 'DELETE',
     }
 
     fetch(`${API}/${id}`, options).then(() => {
-      this.fetchTodos()
+      this.fetchTodos(currentStatus, userId)
     })
   }
 
@@ -138,7 +142,7 @@ export default class TodoBox extends React.Component {
       name,
       description,
       status: 'New',
-      userId: userId,
+      userId,
     }
 
     const options = {
@@ -156,6 +160,32 @@ export default class TodoBox extends React.Component {
 
     this.setState({
       currentStatusFilter: 'New',
+    })
+  }
+
+  createUser({ capitalrizedName }) {
+    const newUser = {
+      name: capitalrizedName,
+    }
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(newUser),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    fetch(UserAPI, options)
+      .then(res => res.json())
+      .then(data => {
+        this.fetchUsers()
+      })
+
+    this.setState({
+      todos: [],
+      currentStatusFilter: 'All',
+      currentUserFilter: capitalrizedName,
     })
   }
 
@@ -221,6 +251,7 @@ export default class TodoBox extends React.Component {
       <div className="row todo-container">
         <div className="cell">
           <h2>Todo App</h2>
+          <CreateUser createUser={this.createUser} />
           <h4>Users</h4>
           <Filter
             users={userFilterOptions}
@@ -228,6 +259,7 @@ export default class TodoBox extends React.Component {
             currentFilter={currentUserFilter}
             filterOptions={userFilterOptions}
           />
+
           <div className="todo">
             {createTodoNode}
             <hr />

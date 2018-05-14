@@ -30,12 +30,11 @@ class Filter extends React.Component {
     this.state = {
       currentFilter: props.currentFilter,
       filterOptions: props.filterOptions,
-      users: props.users,
     }
   }
 
   render() {
-    const { currentFilter, filterOptions, users } = this.state
+    const { currentFilter, filterOptions } = this.state
 
     return (
       <div>
