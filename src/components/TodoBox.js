@@ -14,6 +14,7 @@ export default class TodoBox extends React.Component {
     super()
     this.state = {
       todos: [],
+      users: [],
       currentFilter: 'All',
       currentUserFilter: 'All',
       hasError: false,
@@ -100,18 +101,46 @@ export default class TodoBox extends React.Component {
   }
 
   handleFilterUpdate({ value }) {
-    this.fetchTodos(value)
+    const userName = this.state.currentUserFilter
+    const userId = this.state.users
+      .filter(user => user.name === userName)
+      .map(user => {
+        return user.id
+      })
 
     this.setState({
       currentFilter: value,
     })
+
+    this.fetchTodos(value, userId)
   }
 
   handleUserFilterUpdate({ value }) {
-    console.log(value)
     this.setState({
       currentUserFilter: value,
     })
+    const currentFilter = this.state.currentFilter
+    this.setTodosFromUserName(value, currentFilter)
+  }
+
+  getCurrentUserId() {
+    const userName = this.state.currentUser
+    if (userName !== 'All') {
+      this.state.users.filter(user => user.name === userName).map(user => {
+        return user.id
+      })
+    }
+  }
+
+  setTodosFromUserName(userName) {
+    this.state.users
+      .filter(user => user.name === userName)
+      .map(user => user.todos)
+      .map(todo => {
+        this.setState({
+          todos: todo,
+        })
+      })
   }
 
   createTodo({ name, description }) {
@@ -139,12 +168,20 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  fetchTodos(value) {
+  fetchTodos() {
     let url = API
-    if (value !== undefined && value !== 'All') {
-      url = `${API}/search?status=${value}`
+
+    const currentStatus = this.state.currentStatus
+    const currentUserId = this.getCurrentUserId()
+    console.log(currentUserId)
+    let query
+    if (currentStatus !== 'All' && currentUserId !== undefined) {
+      console.log('id', currentUserId, currentStatus)
+      query = `status=${currentStatus}&userId=${currentUserId}`
+      url = `${API}/search?${query}`
     }
 
+    console.log('url', url)
     fetch(url)
       .then(response => response.json())
       .then(data =>
@@ -160,6 +197,7 @@ export default class TodoBox extends React.Component {
       .then(data =>
         this.setState({
           userFilterOptions: ['All'].concat(data.map(value => value.name)),
+          users: data,
         })
       )
   }
@@ -177,6 +215,11 @@ export default class TodoBox extends React.Component {
       statusFilterOptions,
     } = this.state
 
+    let createTodoNode
+    if (currentUserFilter !== 'All') {
+      createTodoNode = <CreateTodo createTodo={this.createTodo} />
+    }
+
     console.log(userFilterOptions)
     if (this.state.hasError) {
       return <div>Error, something went wrong</div>
@@ -193,7 +236,7 @@ export default class TodoBox extends React.Component {
             filterOptions={userFilterOptions}
           />
           <div className="todo">
-            <CreateTodo createTodo={this.createTodo} />
+            {createTodoNode}
             <hr />
             <h3 className="todo-count">TODO List [{todos.length}]</h3>
             <Filter
