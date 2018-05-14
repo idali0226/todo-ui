@@ -58,11 +58,12 @@ export default class TodoBox extends React.Component {
       })
   }
 
-  handleStatusChange(status) {
-    const userId = this.getCurrentUserId()
+  handleStatusChange(id, status) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+    const currentStatus = this.state.currentStatusFilter
 
     const editedTodo = {
-      id: userId,
+      id,
       status,
     }
 
@@ -74,10 +75,10 @@ export default class TodoBox extends React.Component {
       },
     }
 
-    fetch(`${API}/${userId}`, options)
+    fetch(`${API}/${id}`, options)
       .then(response => response.json())
       .then(() => {
-        this.fetchTodos()
+        this.fetchTodos(currentStatus, userId)
       })
   }
 
