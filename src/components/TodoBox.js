@@ -37,8 +37,9 @@ export default class TodoBox extends React.Component {
   }
 
   handleUpdate({ id, name, description, capitalrizedStatus }) {
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    const currentStatus = this.state.currentStatusFilter
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
+
     const editedTodo = {
       id,
       name,
@@ -56,15 +57,13 @@ export default class TodoBox extends React.Component {
     fetch(`${API}/todos/${id}`, options)
       .then(response => response.json())
       .then(() => {
-        this.fetchTodos(currentStatus, userId)
+        this.fetchTodos(currentStatusFilter, userId)
       })
   }
 
   handleStatusChange(id, status) {
     const { currentUserFilter, currentStatusFilter } = this.state
     const userId = this.getCurrentUserId(currentUserFilter)
-    //  const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    //  const currentStatus = this.state.currentStatusFilter
 
     const editedTodo = {
       id,
@@ -87,15 +86,16 @@ export default class TodoBox extends React.Component {
   }
 
   handleDelete(id) {
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    const currentStatus = this.state.currentStatusFilter
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
 
     const options = {
       method: 'DELETE',
     }
 
-    fetch(`${API}/todos/${id}`, options).then(() => {
-      this.fetchTodos(currentStatus, userId)
+    fetch(`${API}/todos/${id}`, options).then(res => {
+      console.log(res)
+      this.fetchTodos(currentStatusFilter, userId)
     })
   }
 

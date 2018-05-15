@@ -5,7 +5,7 @@ class CreateUser extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isNewUser: false,
+      registerUser: false,
     }
 
     this.handleUserForm = this.handleUserForm.bind(this)
@@ -14,7 +14,7 @@ class CreateUser extends React.Component {
 
   onCreateUser(name) {
     this.setState({
-      isNewUser: !this.state.isNewUser,
+      registerUser: !this.state.registerUser,
     })
     this.props.createUser(name)
   }
@@ -23,12 +23,12 @@ class CreateUser extends React.Component {
     event.preventDefault()
 
     this.setState({
-      isNewUser: !this.state.isNewUser,
+      registerUser: !this.state.registerUser,
     })
   }
 
   render() {
-    if (this.state.isNewUser) {
+    if (this.state.registerUser) {
       return (
         <UserForm
           createUser={this.onCreateUser}
@@ -40,7 +40,7 @@ class CreateUser extends React.Component {
     return (
       <span>
         <a href="" onClick={this.handleUserForm}>
-          <h3>Regist user</h3>
+          <h3>Register new user</h3>
         </a>
       </span>
     )
