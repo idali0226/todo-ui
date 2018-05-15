@@ -5,6 +5,7 @@ import Dropdown from 'react-dropdown'
 const propTypes = {
   onFilterUpdate: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
+  filterOptions: PropTypes.array.isRequired,
 }
 
 class Filter extends React.Component {

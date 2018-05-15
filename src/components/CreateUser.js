@@ -1,5 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import UserForm from './UserForm'
+
+const propTypes = {
+  createUser: PropTypes.func.isRequired,
+}
 
 class CreateUser extends React.Component {
   constructor(props) {
@@ -46,5 +51,5 @@ class CreateUser extends React.Component {
     )
   }
 }
-
+CreateUser.propTypes = propTypes
 export default CreateUser
