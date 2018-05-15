@@ -2,13 +2,12 @@ import React from 'react'
 import 'bootstrap-css'
 import 'react-dropdown/style.css'
 import CreateTodo from './CreateTodo'
+import CreateUser from './CreateUser'
 import TodoList from './TodoList'
 import Filter from './Filter'
-import CreateUser from './CreateUser'
 import '../app.css'
 
-const API = 'http://localhost:3000/todos'
-const UserAPI = 'http://localhost:3000/users'
+const API = 'http://localhost:3000'
 
 export default class TodoBox extends React.Component {
   constructor() {
@@ -23,13 +22,13 @@ export default class TodoBox extends React.Component {
       statusFilterOptions: ['All', 'New', 'Done'],
     }
 
-    this.handleDelete = this.handleDelete.bind(this)
     this.createTodo = this.createTodo.bind(this)
+    this.createUser = this.createUser.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
+    this.handleStatusChange = this.handleStatusChange.bind(this)
     this.handleStatusFilterUpdate = this.handleStatusFilterUpdate.bind(this)
     this.handleUserFilterUpdate = this.handleUserFilterUpdate.bind(this)
-    this.handleStatusChange = this.handleStatusChange.bind(this)
-    this.createUser = this.createUser.bind(this)
   }
 
   componentDidMount() {
@@ -54,7 +53,7 @@ export default class TodoBox extends React.Component {
       },
     }
 
-    fetch(`${API}/${id}`, options)
+    fetch(`${API}/todos/${id}`, options)
       .then(response => response.json())
       .then(() => {
         this.fetchTodos(currentStatus, userId)
@@ -62,8 +61,10 @@ export default class TodoBox extends React.Component {
   }
 
   handleStatusChange(id, status) {
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    const currentStatus = this.state.currentStatusFilter
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
+    //  const userId = this.getCurrentUserId(this.state.currentUserFilter)
+    //  const currentStatus = this.state.currentStatusFilter
 
     const editedTodo = {
       id,
@@ -78,10 +79,10 @@ export default class TodoBox extends React.Component {
       },
     }
 
-    fetch(`${API}/${id}`, options)
+    fetch(`${API}/todos/${id}`, options)
       .then(response => response.json())
       .then(() => {
-        this.fetchTodos(currentStatus, userId)
+        this.fetchTodos(currentStatusFilter, userId)
       })
   }
 
@@ -93,7 +94,7 @@ export default class TodoBox extends React.Component {
       method: 'DELETE',
     }
 
-    fetch(`${API}/${id}`, options).then(() => {
+    fetch(`${API}/todos/${id}`, options).then(() => {
       this.fetchTodos(currentStatus, userId)
     })
   }
@@ -137,6 +138,7 @@ export default class TodoBox extends React.Component {
 
   createTodo({ name, description }) {
     const userId = this.getCurrentUserId(this.state.currentUserFilter)[0]
+    const url = `${API}/todos`
 
     const newTodo = {
       name,
@@ -153,7 +155,7 @@ export default class TodoBox extends React.Component {
       },
     }
 
-    fetch(API, options).then(res => {
+    fetch(url, options).then(res => {
       res.json()
       this.fetchTodos('New', userId)
     })
@@ -164,6 +166,7 @@ export default class TodoBox extends React.Component {
   }
 
   createUser({ capitalrizedName }) {
+    const url = `${API}/users`
     const newUser = {
       name: capitalrizedName,
     }
@@ -176,7 +179,7 @@ export default class TodoBox extends React.Component {
       },
     }
 
-    fetch(UserAPI, options)
+    fetch(url, options)
       .then(res => res.json())
       .then(data => {
         this.fetchUsers()
@@ -190,7 +193,7 @@ export default class TodoBox extends React.Component {
   }
 
   fetchTodos(status, usreId) {
-    let url = API
+    let url = `${API}/todos`
     let query
     if (status !== 'All' && status !== undefined) {
       query = `status=${status}`
@@ -204,7 +207,7 @@ export default class TodoBox extends React.Component {
     }
 
     if (query) {
-      url = `${API}/search?${query}`
+      url = `${API}/todos/search?${query}`
     }
     fetch(url)
       .then(response => response.json())
@@ -216,7 +219,7 @@ export default class TodoBox extends React.Component {
   }
 
   fetchUsers() {
-    fetch(`${UserAPI}`)
+    fetch(`${API}/users`)
       .then(response => response.json())
       .then(data =>
         this.setState({
