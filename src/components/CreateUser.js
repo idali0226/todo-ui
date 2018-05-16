@@ -13,23 +13,24 @@ class CreateUser extends React.Component {
       registerUser: false,
     }
 
-    this.handleUserForm = this.handleUserForm.bind(this)
+    this.handleToggleUserForm = this.handleToggleUserForm.bind(this)
     this.onCreateUser = this.onCreateUser.bind(this)
   }
 
   onCreateUser(name) {
-    this.setState({
-      registerUser: !this.state.registerUser,
-    })
+    this.toggleFormOpen()
     this.props.createUser(name)
   }
 
-  handleUserForm(event) {
-    event.preventDefault()
-
+  toggleFormOpen() {
     this.setState({
       registerUser: !this.state.registerUser,
     })
+  }
+
+  handleToggleUserForm(event) {
+    event.preventDefault()
+    this.toggleFormOpen()
   }
 
   render() {
@@ -37,17 +38,15 @@ class CreateUser extends React.Component {
       return (
         <UserForm
           createUser={this.onCreateUser}
-          onCancel={this.handleUserForm}
+          onCancel={this.handleToggleUserForm}
         />
       )
     }
 
     return (
-      <span>
-        <a href="" onClick={this.handleUserForm}>
-          <h3>Register new user</h3>
-        </a>
-      </span>
+      <a href="" onClick={this.handleToggleUserForm}>
+        <h3>Register new user</h3>
+      </a>
     )
   }
 }
