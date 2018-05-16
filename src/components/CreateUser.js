@@ -10,7 +10,7 @@ class CreateUser extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      registerUser: false,
+      registerFormOpen: false,
     }
 
     this.handleToggleUserForm = this.handleToggleUserForm.bind(this)
@@ -24,7 +24,7 @@ class CreateUser extends React.Component {
 
   toggleFormOpen() {
     this.setState({
-      registerUser: !this.state.registerUser,
+      registerFormOpen: !this.state.registerFormOpen,
     })
   }
 
@@ -34,7 +34,7 @@ class CreateUser extends React.Component {
   }
 
   render() {
-    if (this.state.registerUser) {
+    if (this.state.registerFormOpen) {
       return (
         <UserForm
           createUser={this.onCreateUser}
