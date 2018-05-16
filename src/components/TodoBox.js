@@ -259,7 +259,7 @@ export default class TodoBox extends React.Component {
             users={userFilterOptions}
             onFilterUpdate={this.handleUserFilterUpdate}
             currentFilter={currentUserFilter}
-            filterOptions={userFilterOptions}
+            options={userFilterOptions}
           />
 
           <div className="todo">
@@ -269,7 +269,7 @@ export default class TodoBox extends React.Component {
             <Filter
               onFilterUpdate={this.handleStatusFilterUpdate}
               currentFilter={currentStatusFilter}
-              filterOptions={statusFilterOptions}
+              options={statusFilterOptions}
             />
 
             <TodoList

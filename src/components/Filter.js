@@ -5,7 +5,7 @@ import Dropdown from 'react-dropdown'
 const propTypes = {
   onFilterUpdate: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
-  filterOptions: PropTypes.array.isRequired,
+  options: PropTypes.array.isRequired,
 }
 
 class Filter extends React.Component {
@@ -18,7 +18,7 @@ class Filter extends React.Component {
 
     if (nextProps.users !== prevState.users) {
       return {
-        filterOptions: nextProps.users,
+        options: nextProps.users,
       }
     }
 
@@ -30,17 +30,17 @@ class Filter extends React.Component {
     super(props)
     this.state = {
       currentFilter: props.currentFilter,
-      filterOptions: props.filterOptions,
+      options: props.options,
     }
   }
 
   render() {
-    const { currentFilter, filterOptions } = this.state
+    const { currentFilter, options } = this.state
 
     return (
       <div>
         <Dropdown
-          options={filterOptions}
+          options={options}
           onChange={this.props.onFilterUpdate}
           value={currentFilter}
           placeholder="Select an option"
