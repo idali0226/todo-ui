@@ -191,16 +191,16 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  fetchTodos(status, usreId) {
+  fetchTodos(status, userId) {
     let url = `${API}/todos`
     let query
     if (status !== 'All' && status !== undefined) {
       query = `status=${status}`
-      if (usreId !== undefined) {
-        query = `${query}&userId=${usreId}`
+      if (userId !== undefined) {
+        query = `${query}&userId=${userId}`
       }
-    } else if (usreId !== undefined) {
-      query = `userId=${usreId}`
+    } else if (userId !== undefined) {
+      query = `userId=${userId}`
     }
 
     if (query) {
