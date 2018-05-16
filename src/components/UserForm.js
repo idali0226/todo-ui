@@ -20,9 +20,9 @@ class UserForm extends React.Component {
     const { name } = this.state
 
     if (name) {
-      const capitalrizedName =
+      const capitalizedStatus =
         name.slice(0, 1).toUpperCase() + name.slice(1, name.length)
-      this.props.createUser({ capitalrizedName })
+      this.props.createUser({ capitalizedStatus })
 
       this.setState({
         name: '',

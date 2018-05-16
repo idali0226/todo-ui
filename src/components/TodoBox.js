@@ -107,7 +107,7 @@ export default class TodoBox extends React.Component {
       })
   }
 
-  handleUpdate({ id, name, description, capitalrizedStatus }) {
+  handleUpdate({ id, name, description, capitalizedStatus }) {
     const { currentUserFilter, currentStatusFilter } = this.state
     const userId = this.getCurrentUserId(currentUserFilter)
 
@@ -115,7 +115,7 @@ export default class TodoBox extends React.Component {
       id,
       name,
       description,
-      status: capitalrizedStatus,
+      status: capitalizedStatus,
     }
     const options = {
       method: 'PUT',
@@ -181,10 +181,10 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  createUser({ capitalrizedName }) {
+  createUser({ capitalizedStatus }) {
     const url = `${API}/users`
     const newUser = {
-      name: capitalrizedName,
+      name: capitalizedStatus,
     }
 
     const options = {
@@ -204,7 +204,7 @@ export default class TodoBox extends React.Component {
     this.setState({
       todos: [],
       currentStatusFilter: 'All',
-      currentUserFilter: capitalrizedName,
+      currentUserFilter: capitalizedStatus,
     })
   }
 
