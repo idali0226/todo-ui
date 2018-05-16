@@ -9,6 +9,22 @@ import '../app.css'
 
 const API = 'http://localhost:3000'
 
+const buildQuery = data => {
+  let query
+  Object.keys(data).map(key => {
+    if (data[key] !== 'All' && data[key] !== undefined) {
+      const value = `${key}=${data[key]}`
+      if (query) {
+        query = `${query}&${value}`
+      } else {
+        query = value
+      }
+    }
+    return query
+  })
+  return query
+}
+
 export default class TodoBox extends React.Component {
   constructor() {
     super()
@@ -136,7 +152,8 @@ export default class TodoBox extends React.Component {
   }
 
   createTodo({ name, description }) {
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)[0]
+    //  const userId = this.getCurrentUserId(this.state.currentUserFilter)[0]
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
     const url = `${API}/todos`
 
     const newTodo = {
@@ -192,17 +209,13 @@ export default class TodoBox extends React.Component {
   }
 
   fetchTodos(status, userId) {
-    let url = `${API}/todos`
-    let query
-    if (status !== 'All' && status !== undefined) {
-      query = `status=${status}`
-      if (userId !== undefined) {
-        query = `${query}&userId=${userId}`
-      }
-    } else if (userId !== undefined) {
-      query = `userId=${userId}`
+    const queryParms = {
+      status,
+      userId,
     }
 
+    const query = buildQuery(queryParms)
+    let url = `${API}/todos`
     if (query) {
       url = `${API}/todos/search?${query}`
     }
