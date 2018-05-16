@@ -37,12 +37,10 @@ export default class TodoBox extends React.Component {
   }
 
   getCurrentUserId(value) {
-    if (value !== 'All') {
-      return this.state.users.filter(user => user.name === value).map(user => {
-        return user.id
-      })
-    }
-    return undefined
+    const user = this.state.users.find(u => {
+      return u.name === value
+    })
+    return user ? user.id : undefined
   }
 
   getTodoTitle(todosCount) {
