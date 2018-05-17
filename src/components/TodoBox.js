@@ -22,6 +22,22 @@ const buildQuery = queryParms => {
   }, '')
 }
 
+const buildQuery = data => {
+  let query
+  Object.keys(data).map(key => {
+    if (data[key] !== 'All' && data[key] !== undefined) {
+      const value = `${key}=${data[key]}`
+      if (query) {
+        query = `${query}&${value}`
+      } else {
+        query = value
+      }
+    }
+    return query
+  })
+  return query
+}
+
 export default class TodoBox extends React.Component {
   constructor() {
     super()
