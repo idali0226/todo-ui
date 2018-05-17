@@ -130,19 +130,6 @@ export default class TodoBox extends React.Component {
       })
   }
 
-  handleDelete(id) {
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    const currentStatus = this.state.currentStatusFilter
-
-    const options = {
-      method: 'DELETE',
-    }
-
-    fetch(`${API}/${id}`, options).then(() => {
-      this.fetchTodos(currentStatus, userId)
-    })
-  }
-
   handleStatusFilterUpdate({ value }) {
     const userId = this.getCurrentUserId(this.state.currentUserFilter)
 
