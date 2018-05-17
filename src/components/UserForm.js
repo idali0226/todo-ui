@@ -1,10 +1,13 @@
 import React from 'react'
+<<<<<<< HEAD
 import PropTypes from 'prop-types'
 
 const propTypes = {
   createUser: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 }
+=======
+>>>>>>> 6af9c2f... Add create user component and createForm
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -20,9 +23,15 @@ class UserForm extends React.Component {
     const { name } = this.state
 
     if (name) {
+<<<<<<< HEAD
       const capitalizedStatus =
         name.slice(0, 1).toUpperCase() + name.slice(1, name.length)
       this.props.createUser({ capitalizedStatus })
+=======
+      const capitalrizedName =
+        name.slice(0, 1).toUpperCase() + name.slice(1, name.length)
+      this.props.createUser({ capitalrizedName })
+>>>>>>> 6af9c2f... Add create user component and createForm
 
       this.setState({
         name: '',
@@ -55,5 +64,8 @@ class UserForm extends React.Component {
     )
   }
 }
+<<<<<<< HEAD
 UserForm.propTypes = propTypes
+=======
+>>>>>>> 6af9c2f... Add create user component and createForm
 export default UserForm
