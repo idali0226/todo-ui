@@ -42,6 +42,7 @@ export default class TodoBox extends React.Component {
     this.handleStatusFilterUpdate = this.handleStatusFilterUpdate.bind(this)
     this.handleUserFilterUpdate = this.handleUserFilterUpdate.bind(this)
     this.handleStatusChange = this.handleStatusChange.bind(this)
+    this.createUser = this.createUser.bind(this)
   }
 
   componentDidMount() {
@@ -127,6 +128,19 @@ export default class TodoBox extends React.Component {
       .then(() => {
         this.fetchTodos(currentStatusFilter, userId)
       })
+  }
+
+  handleDelete(id) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+    const currentStatus = this.state.currentStatusFilter
+
+    const options = {
+      method: 'DELETE',
+    }
+
+    fetch(`${API}/${id}`, options).then(() => {
+      this.fetchTodos(currentStatus, userId)
+    })
   }
 
   handleStatusFilterUpdate({ value }) {
