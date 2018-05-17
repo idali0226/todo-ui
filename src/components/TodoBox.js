@@ -149,7 +149,6 @@ export default class TodoBox extends React.Component {
   }
 
   createTodo({ name, description }) {
-    //  const userId = this.getCurrentUserId(this.state.currentUserFilter)[0]
     const userId = this.getCurrentUserId(this.state.currentUserFilter)
     const url = `${API}/todos`
 
@@ -216,7 +215,6 @@ export default class TodoBox extends React.Component {
     if (query) {
       url = `${API}/todos/search?${query}`
     }
-
     fetch(url)
       .then(response => response.json())
       .then(data =>
