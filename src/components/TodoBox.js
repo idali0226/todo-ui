@@ -178,10 +178,10 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  createUser({ capitalizedStatus }) {
+  createUser({ capitalrizedName }) {
     const url = `${API}/users`
     const newUser = {
-      name: capitalizedStatus,
+      name: capitalrizedName,
     }
 
     const options = {
@@ -201,7 +201,7 @@ export default class TodoBox extends React.Component {
     this.setState({
       todos: [],
       currentStatusFilter: 'All',
-      currentUserFilter: capitalizedStatus,
+      currentUserFilter: capitalrizedName,
     })
   }
 

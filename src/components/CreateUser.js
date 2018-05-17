@@ -17,9 +17,9 @@ class CreateUser extends React.Component {
     this.onCreateUser = this.onCreateUser.bind(this)
   }
 
-  onCreateUser(name) {
+  onCreateUser(capitalrizedName) {
     this.toggleFormOpen()
-    this.props.createUser(name)
+    this.props.createUser(capitalrizedName)
   }
 
   toggleFormOpen() {
