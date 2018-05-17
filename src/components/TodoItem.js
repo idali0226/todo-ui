@@ -39,6 +39,7 @@ class TodoItem extends React.Component {
 
   onUpdate({ id, name, description, capitalizedStatus }) {
     this.props.onUpdate({ id, name, description, capitalizedStatus })
+
     this.setState({
       isEdit: false,
     })
