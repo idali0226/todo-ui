@@ -36,6 +36,10 @@ class TodosForm extends React.Component {
     e.preventDefault()
 
     const { id, name, description, status } = this.state
+<<<<<<< HEAD
+=======
+
+>>>>>>> ce4311f... Resolve conflict
     const capitalizedStatus =
       status.slice(0, 1).toUpperCase() + status.slice(1, status.length)
     if (this.state.isEdit) {

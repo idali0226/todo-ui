@@ -22,22 +22,6 @@ const buildQuery = queryParms => {
   }, '')
 }
 
-const buildQuery = data => {
-  let query
-  Object.keys(data).map(key => {
-    if (data[key] !== 'All' && data[key] !== undefined) {
-      const value = `${key}=${data[key]}`
-      if (query) {
-        query = `${query}&${value}`
-      } else {
-        query = value
-      }
-    }
-    return query
-  })
-  return query
-}
-
 export default class TodoBox extends React.Component {
   constructor() {
     super()
@@ -96,17 +80,15 @@ export default class TodoBox extends React.Component {
     })
   }
 
-  handleUpdate({ id, name, description, capitalrizedStatus }) {
+  handleStatusChange(id, status) {
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
+
     const editedTodo = {
       id,
-<<<<<<< HEAD
       status,
-=======
-      name,
-      description,
-      status: capitalrizedStatus,
->>>>>>> 9de7b93... Resolve conflict
     }
+
     const options = {
       method: 'PATCH',
       body: JSON.stringify(editedTodo),
@@ -115,20 +97,10 @@ export default class TodoBox extends React.Component {
       },
     }
 
-<<<<<<< HEAD
     fetch(`${API}/todos/${id}`, options)
       .then(response => response.json())
       .then(() => {
         this.fetchTodos(currentStatusFilter, userId)
-=======
-    const userId = this.getCurrentUserId(this.state.currentUserFilter)
-    const currentStatus = this.state.currentStatusFilter
-
-    fetch(`${API}/${id}`, options)
-      .then(response => response.json())
-      .then(() => {
-        this.fetchTodos(currentStatus, userId)
->>>>>>> 9de7b93... Resolve conflict
       })
   }
 
@@ -177,6 +149,7 @@ export default class TodoBox extends React.Component {
   }
 
   createTodo({ name, description }) {
+    //  const userId = this.getCurrentUserId(this.state.currentUserFilter)[0]
     const userId = this.getCurrentUserId(this.state.currentUserFilter)
     const url = `${API}/todos`
 
