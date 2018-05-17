@@ -9,20 +9,17 @@ import '../app.css'
 
 const API = 'http://localhost:3000'
 
-const buildQuery = data => {
-  let query
-  Object.keys(data).map(key => {
-    if (data[key] !== 'All' && data[key] !== undefined) {
-      const value = `${key}=${data[key]}`
+const buildQuery = queryParms => {
+  return Object.keys(queryParms).reduce((query, key) => {
+    if (queryParms[key] !== 'All' && queryParms[key] !== undefined) {
+      const value = `${key}=${queryParms[key]}`
       if (query) {
-        query = `${query}&${value}`
-      } else {
-        query = value
+        return `${query}&${value}`
       }
+      return value
     }
     return query
-  })
-  return query
+  }, '')
 }
 
 export default class TodoBox extends React.Component {
