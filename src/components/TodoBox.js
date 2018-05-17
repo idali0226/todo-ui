@@ -2,84 +2,58 @@ import React from 'react'
 import 'bootstrap-css'
 import 'react-dropdown/style.css'
 import CreateTodo from './CreateTodo'
+import CreateUser from './CreateUser'
 import TodoList from './TodoList'
 import Filter from './Filter'
 import '../app.css'
 
-const API = 'http://localhost:3000/todos'
+const API = 'http://localhost:3000'
+
+const buildQuery = queryParms => {
+  return Object.keys(queryParms).reduce((query, key) => {
+    if (queryParms[key] !== 'All' && queryParms[key] !== undefined) {
+      const value = `${key}=${queryParms[key]}`
+      if (query) {
+        return `${query}&${value}`
+      }
+      return value
+    }
+    return query
+  }, '')
+}
 
 export default class TodoBox extends React.Component {
   constructor() {
     super()
     this.state = {
       todos: [],
-      currentFilter: 'All',
+      users: [],
+      currentStatusFilter: 'All',
+      currentUserFilter: 'All',
       hasError: false,
+      userFilterOptions: [],
+      statusFilterOptions: ['All', 'New', 'Done'],
     }
 
-    this.handleDelete = this.handleDelete.bind(this)
     this.createTodo = this.createTodo.bind(this)
+    this.createUser = this.createUser.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
-    this.handleFilterUpdate = this.handleFilterUpdate.bind(this)
     this.handleStatusChange = this.handleStatusChange.bind(this)
+    this.handleStatusFilterUpdate = this.handleStatusFilterUpdate.bind(this)
+    this.handleUserFilterUpdate = this.handleUserFilterUpdate.bind(this)
   }
 
   componentDidMount() {
     this.fetchTodos()
+    this.fetchUsers()
   }
 
-  handleUpdate({ id, name, description, status }) {
-    const editedTodo = {
-      id,
-      name,
-      description,
-      status,
-    }
-
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify(editedTodo),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-
-    fetch(`${API}/${id}`, options)
-      .then(response => response.json())
-      .then(() => {
-        this.fetchTodos()
-      })
-  }
-
-  handleStatusChange(id, status) {
-    const editedTodo = {
-      id,
-      status,
-    }
-
-    const options = {
-      method: 'PATCH',
-      body: JSON.stringify(editedTodo),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-
-    fetch(`${API}/${id}`, options)
-      .then(response => response.json())
-      .then(() => {
-        this.fetchTodos()
-      })
-  }
-
-  handleDelete(id) {
-    const options = {
-      method: 'DELETE',
-    }
-
-    fetch(`${API}/${id}`, options).then(() => {
-      this.fetchTodos()
+  getCurrentUserId(value) {
+    const user = this.state.users.find(u => {
+      return u.name === value
     })
+    return user ? user.id : undefined
   }
 
   getTodoTitle(todosCount) {
@@ -93,19 +67,97 @@ export default class TodoBox extends React.Component {
     return this.title
   }
 
-  handleFilterUpdate({ value }) {
-    this.fetchTodos(value)
+  handleDelete(id) {
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
 
-    this.setState({
-      currentFilter: value,
+    const options = {
+      method: 'DELETE',
+    }
+
+    fetch(`${API}/todos/${id}`, options).then(() => {
+      this.fetchTodos(currentStatusFilter, userId)
     })
   }
 
+  handleStatusChange(id, status) {
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
+
+    const editedTodo = {
+      id,
+      status,
+    }
+
+    const options = {
+      method: 'PATCH',
+      body: JSON.stringify(editedTodo),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    fetch(`${API}/todos/${id}`, options)
+      .then(response => response.json())
+      .then(() => {
+        this.fetchTodos(currentStatusFilter, userId)
+      })
+  }
+
+  handleUpdate({ id, name, description, capitalizedStatus }) {
+    const { currentUserFilter, currentStatusFilter } = this.state
+    const userId = this.getCurrentUserId(currentUserFilter)
+
+    const editedTodo = {
+      id,
+      name,
+      description,
+      status: capitalizedStatus,
+    }
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify(editedTodo),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    fetch(`${API}/todos/${id}`, options)
+      .then(response => response.json())
+      .then(() => {
+        this.fetchTodos(currentStatusFilter, userId)
+      })
+  }
+
+  handleStatusFilterUpdate({ value }) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+
+    this.setState({
+      currentStatusFilter: value,
+    })
+    this.fetchTodos(value, userId)
+  }
+
+  handleUserFilterUpdate({ value }) {
+    const currentFilter = this.state.currentStatusFilter
+    this.setState({
+      currentUserFilter: value,
+    })
+
+    const userId = this.getCurrentUserId(value)
+    this.fetchTodos(currentFilter, userId)
+  }
+
   createTodo({ name, description }) {
+    const userId = this.getCurrentUserId(this.state.currentUserFilter)
+
+    const url = `${API}/todos`
+
     const newTodo = {
       name,
       description,
       status: 'New',
+      userId,
     }
 
     const options = {
@@ -116,22 +168,54 @@ export default class TodoBox extends React.Component {
       },
     }
 
-    fetch(API, options).then(res => {
+    fetch(url, options).then(res => {
       res.json()
-      this.fetchTodos()
+      this.fetchTodos('New', userId)
     })
 
     this.setState({
-      currentFilter: 'All',
+      currentStatusFilter: 'New',
     })
   }
 
-  fetchTodos(value) {
-    let url = API
-    if (value !== undefined && value !== 'All') {
-      url = `${API}/search?status=${value}`
+  createUser({ capitalizedStatus }) {
+    const url = `${API}/users`
+    const newUser = {
+      name: capitalizedStatus,
     }
 
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(newUser),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(() => {
+        this.fetchUsers()
+      })
+
+    this.setState({
+      todos: [],
+      currentStatusFilter: 'All',
+      currentUserFilter: capitalizedStatus,
+    })
+  }
+
+  fetchTodos(status, userId) {
+    const queryParms = {
+      status,
+      userId,
+    }
+
+    const query = buildQuery(queryParms)
+    let url = `${API}/todos`
+    if (query) {
+      url = `${API}/todos/search?${query}`
+    }
     fetch(url)
       .then(response => response.json())
       .then(data =>
@@ -141,12 +225,34 @@ export default class TodoBox extends React.Component {
       )
   }
 
+  fetchUsers() {
+    fetch(`${API}/users`)
+      .then(response => response.json())
+      .then(data =>
+        this.setState({
+          userFilterOptions: ['All'].concat(data.map(value => value.name)),
+          users: data,
+        })
+      )
+  }
+
   componentDidCatch() {
     this.setState({ hasError: true })
   }
 
   render() {
-    const { todos, currentFilter } = this.state
+    const {
+      todos,
+      userFilterOptions,
+      currentStatusFilter,
+      currentUserFilter,
+      statusFilterOptions,
+    } = this.state
+
+    let createTodoNode
+    if (currentUserFilter !== 'All') {
+      createTodoNode = <CreateTodo createTodo={this.createTodo} />
+    }
 
     if (this.state.hasError) {
       return <div>Error, something went wrong</div>
@@ -155,13 +261,23 @@ export default class TodoBox extends React.Component {
       <div className="row todo-container">
         <div className="cell">
           <h2>Todo App</h2>
+          <CreateUser createUser={this.createUser} />
+          <h4>Users</h4>
+          <Filter
+            users={userFilterOptions}
+            onFilterUpdate={this.handleUserFilterUpdate}
+            currentFilter={currentUserFilter}
+            options={userFilterOptions}
+          />
+
           <div className="todo">
-            <CreateTodo createTodo={this.createTodo} />
+            {createTodoNode}
             <hr />
             <h3 className="todo-count">TODO List [{todos.length}]</h3>
             <Filter
-              onFilterUpdate={this.handleFilterUpdate}
-              currentFilter={currentFilter}
+              onFilterUpdate={this.handleStatusFilterUpdate}
+              currentFilter={currentStatusFilter}
+              options={statusFilterOptions}
             />
 
             <TodoList
