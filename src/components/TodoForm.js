@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
-  createTodo: PropTypes.func,
+  onCreate: PropTypes.func,
   onUpdate: PropTypes.func,
   isEdit: PropTypes.bool.isRequired,
   id: PropTypes.number,
@@ -16,7 +16,7 @@ const defaultProps = {
   name: '',
   description: '',
   status: '',
-  createTodo: undefined,
+  onCreate: undefined,
   onUpdate: undefined,
 }
 
@@ -34,20 +34,12 @@ class TodosForm extends React.Component {
 
   onSubmit = e => {
     e.preventDefault()
-
     const { id, name, description, status } = this.state
 
-    const capitalizedStatus =
-      status.slice(0, 1).toUpperCase() + status.slice(1, status.length)
-    if (this.state.isEdit) {
-      this.props.onUpdate({ id, name, description, capitalizedStatus })
-
-      this.setState({
-        isEdit: false,
-      })
+    if (this.props.isEdit) {
+      this.props.onUpdate(id, name, description, status)
     } else {
-      this.props.createTodo({ name, description })
-
+      this.props.onCreate(name, description)
       this.setState({
         name: '',
         description: '',
@@ -57,6 +49,7 @@ class TodosForm extends React.Component {
 
   render() {
     const { description, name, status, isEdit } = this.state
+
     const buttonText = isEdit ? 'Update' : 'Create TODO Item'
     let statusNode
     if (isEdit) {
@@ -72,22 +65,24 @@ class TodosForm extends React.Component {
     return (
       <div>
         <form onSubmit={this.onSubmit} className="todo-form">
-          <label htmlFor="todoInput">New todo</label>
-          <div className="todo-form-fields" id="todoInput">
-            <input
-              id="name"
-              placeholder="Name"
-              value={name}
-              onChange={e => this.setState({ name: e.target.value })}
-            />
-            <textarea
-              id="description"
-              placeholder="Description"
-              onChange={e => this.setState({ description: e.target.value })}
-              value={description}
-            />
-            {statusNode}
-          </div>
+          <label htmlFor="todoInput">
+            New todo
+            <div className="todo-form-fields" id="todoInput">
+              <input
+                id="name"
+                placeholder="Name"
+                value={name}
+                onChange={e => this.setState({ name: e.target.value })}
+              />
+              <textarea
+                id="description"
+                placeholder="Description"
+                onChange={e => this.setState({ description: e.target.value })}
+                value={description}
+              />
+              {statusNode}
+            </div>
+          </label>
 
           <div className="todo-form-actions">
             <button type="submit">{buttonText}</button>
@@ -100,5 +95,4 @@ class TodosForm extends React.Component {
 
 TodosForm.propTypes = propTypes
 TodosForm.defaultProps = defaultProps
-
 export default TodosForm
