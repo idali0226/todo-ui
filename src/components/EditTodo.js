@@ -18,29 +18,41 @@ const mapDispatchToProps = {
   updateTodo,
 }
 
+const mapStateToProps = state => {
+  return {
+    todo: state.todos.todo,
+  }
+}
+
 class EditTodo extends React.Component {
   constructor(props) {
     super(props)
     this.handleEditTodo = this.handleEditTodo.bind(this)
   }
 
-  handleEditTodo = (id, name, description, status) => {
-    const capitalizedStatus =
-      status.slice(0, 1).toUpperCase() + status.slice(1, status.length)
-
-    this.props.updateTodo(id, name, description, capitalizedStatus)
+  handleEditTodo = ({ id, name, description, status }) => {
+    this.props.updateTodo(id, name, description, status)
     this.props.onCloseEditForm()
   }
 
   render() {
     const { ...todo } = this.props
+    const initialValues = {
+      initialValues: todo,
+    }
+
     return (
       <div>
-        <TodoForm {...todo} onUpdate={this.handleEditTodo} isEdit />
+        <TodoForm
+          form={`todoForm-edit-${todo.id}`}
+          {...initialValues}
+          onSubmit={this.handleEditTodo}
+          isEdit
+        />
       </div>
     )
   }
 }
 EditTodo.propTypes = propTypes
 EditTodo.defaultProps = defaultProps
-export default connect(undefined, mapDispatchToProps)(EditTodo)
+export default connect(mapStateToProps, mapDispatchToProps)(EditTodo)

@@ -7,31 +7,30 @@ export const fetchUsers = () => {
     dispatch({
       type: actionTypes.FETCH_USERS_REQUEST,
     })
-    return fetch(`${API}/users`).then(
-      response => {
-        return response.json().then(res => {
+    return fetch(`${API}/users`).then(response => {
+      return response
+        .json()
+        .then(res => {
           dispatch({
             type: actionTypes.FETCH_USERS_SUCCESS,
             payload: res,
           })
           return res
         })
-      },
-      error => {
-        dispatch({
-          type: actionTypes.FETCH_USERS_FAILURE,
-          error: true,
-          payload: error,
-        })
-        return error
-      }
-    )
+        .catch(error =>
+          dispatch({
+            type: actionTypes.FETCH_USERS_FAILURE,
+            payload: error,
+            error: true,
+          })
+        )
+    })
   }
 }
 
-export const createUser = capitalrizedName => {
+export const createUser = name => {
   const newUser = {
-    name: capitalrizedName,
+    name,
   }
 
   const options = {
@@ -46,25 +45,24 @@ export const createUser = capitalrizedName => {
     dispatch({
       type: actionTypes.CREATE_USER_REQUEST,
     })
-    return fetch(`${API}/users`, options).then(
-      response => {
-        return response.json().then(res => {
+    return fetch(`${API}/users`, options).then(response => {
+      return response
+        .json()
+        .then(res => {
           dispatch({
             type: actionTypes.CREATE_USER_SUCCESS,
             payload: res,
           })
           return res
         })
-      },
-      error => {
-        dispatch({
-          type: actionTypes.CREATE_USER_FAILURE,
-          error: true,
-          payload: error,
-        })
-        return error
-      }
-    )
+        .catch(error =>
+          dispatch({
+            type: actionTypes.CREATE_USER_FAILURE,
+            error: true,
+            payload: error,
+          })
+        )
+    })
   }
 }
 

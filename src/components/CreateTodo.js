@@ -30,10 +30,10 @@ const mapDispatchToProps = {
 class CreateTodo extends React.Component {
   constructor() {
     super()
-    this.handleCreateTodo = this.handleCreateTodo.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleCreateTodo = (name, description) => {
+  handleSubmit = ({ name, description }) => {
     this.props.createTodo(name, description, this.props.userId)
   }
 
@@ -47,10 +47,18 @@ class CreateTodo extends React.Component {
       )
     }
 
+    const initialValues = {
+      initialValues: {},
+    }
+
     return (
       <div>
         {errorNode}
-        <TodoForm isEdit={false} onCreate={this.handleCreateTodo} />
+        <TodoForm
+          {...initialValues}
+          isEdit={false}
+          onSubmit={this.handleSubmit}
+        />
       </div>
     )
   }

@@ -26,6 +26,7 @@
     "import/prefer-default-export": 0,
     "indent": 0,
     "jsx-a11y/anchor-is-valid": 0,
+    "no-class-assign": 0,
     "react/prefer-stateless-function": [0, { "ignorePureComponents": true }],
     "no-console": 2,
     "prefer-destructuring": 1,

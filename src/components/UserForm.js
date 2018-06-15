@@ -1,79 +1,56 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { toggleFormOpen, createUser, resetTodos } from '../actions'
+import { Field, reduxForm, propTypes } from 'redux-form'
+import InputField from './InputField'
 
-const propTypes = {
-  createUser: PropTypes.func.isRequired,
-  resetTodos: PropTypes.func.isRequired,
-  toggleFormOpen: PropTypes.func.isRequired,
+const validate = values => {
+  const errors = {}
+  if (!values.name) {
+    errors.name = 'Name is equired'
+  }
+  return errors
 }
 
-const mapDispatchToProps = {
-  toggleFormOpen,
-  createUser,
-  resetTodos,
-}
+const capitalizedValue = value =>
+  value && value.slice(0, 1).toUpperCase() + value.slice(1, value.length)
 
 class UserForm extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      name: '',
-    }
-
-    this.handleCancelUserForm = this.handleCancelUserForm.bind(this)
-  }
-
-  onSubmit = e => {
-    e.preventDefault()
-
-    const { name } = this.state
-    if (name) {
-      const capitalrizedName =
-        name.slice(0, 1).toUpperCase() + name.slice(1, name.length)
-
-      this.props.createUser(capitalrizedName)
-      this.props.resetTodos()
-      this.props.toggleFormOpen(false)
-
-      this.setState({
-        name: '',
-      })
-    }
-  }
-
-  handleCancelUserForm = e => {
-    e.preventDefault()
-    this.props.toggleFormOpen(false)
+  static propTypes = {
+    ...propTypes,
   }
 
   render() {
-    const { name } = this.state
+    const { handleSubmit, onCancel, submitting } = this.props
+
     return (
-      <div>
-        <form onSubmit={this.onSubmit} className="todo-form">
-          <label htmlFor="userInput">
-            New user
-            <div className="todo-form-fields" id="userInput">
-              <input
-                id="name"
-                placeholder="Name"
-                value={name}
-                onChange={e => this.setState({ name: e.target.value })}
-              />
-            </div>
-          </label>
-
-          <div className="todo-form-actions">
-            <button onClick={this.handleCancelUserForm}>Cancel</button>
-
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={handleSubmit} className="todo-form">
+        <div>
+          <h2>New User</h2>
+        </div>
+        <div className="todo-form-fields">
+          <Field
+            type="text"
+            name="name"
+            component={InputField}
+            label="Name"
+            normalize={capitalizedValue}
+          />
+        </div>
+        <div className="todo-form-actions">
+          <button type="button" disabled={submitting} onClick={onCancel}>
+            Cancel
+          </button>
+          <button type="submit" disabled={submitting}>
+            Submit
+          </button>
+        </div>
+      </form>
     )
   }
 }
-UserForm.propTypes = propTypes
-export default connect(undefined, mapDispatchToProps)(UserForm)
+
+UserForm = reduxForm({
+  form: 'userForm',
+  validate,
+})(UserForm)
+
+export default UserForm

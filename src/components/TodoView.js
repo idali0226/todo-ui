@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { deleteTodo, changeTodoStatus } from '../actions'
+import { deleteTodo, changeTodoStatus, toggleTodoFormOpen } from '../actions'
 import RemoveConfirmation from './RemoveConfirmation'
 
 const propTypes = {
@@ -12,6 +12,7 @@ const propTypes = {
   deleteTodo: PropTypes.func.isRequired,
   changeTodoStatus: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  toggleTodoFormOpen: PropTypes.func,
 }
 
 const defaultProps = {
@@ -19,17 +20,13 @@ const defaultProps = {
   name: undefined,
   description: undefined,
   status: undefined,
-}
-
-const mapStateToProps = state => {
-  return {
-    todos: state.todos.todos,
-  }
+  toggleTodoFormOpen: undefined,
 }
 
 const mapDispatchToProps = {
   deleteTodo,
   changeTodoStatus,
+  toggleTodoFormOpen,
 }
 
 class TodoView extends React.Component {
@@ -43,6 +40,10 @@ class TodoView extends React.Component {
 
   onEdit = e => {
     e.preventDefault()
+
+    const { id, description, name, status } = this.props
+    console.log(id, name, description, status)
+    this.props.toggleTodoFormOpen(true, id, name, description, status)
     this.props.onEdit()
   }
 
@@ -85,4 +86,4 @@ class TodoView extends React.Component {
 
 TodoView.propTypes = propTypes
 TodoView.defaultProps = defaultProps
-export default connect(mapStateToProps, mapDispatchToProps)(TodoView)
+export default connect(undefined, mapDispatchToProps)(TodoView)

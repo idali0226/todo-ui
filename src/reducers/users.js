@@ -1,18 +1,11 @@
 import * as actionTypes from '../constants/actionTypes'
-
-const initialState = {
-  users: [],
-  currentUserFilter: 'All',
-  registerFormOpen: false,
-  isFatching: false,
-  isPersisting: false,
-}
+import initialState from './initialState'
 
 function users(state = initialState, action) {
   switch (action.type) {
     case actionTypes.CREATE_USER_REQUEST:
       return Object.assign({}, state, {
-        isPersisting: true,
+        isSubmiting: true,
       })
     case actionTypes.CREATE_USER_SUCCESS:
       return Object.assign({}, state, {
@@ -23,21 +16,26 @@ function users(state = initialState, action) {
             name: action.payload.name,
           },
         ],
-        isPersisting: false,
+        isSubmiting: false,
         currentUserFilter: action.payload.name,
       })
     case actionTypes.FETCH_USERS_REQUEST:
       return Object.assign({}, state, {
-        isFatching: true,
+        isFetching: true,
       })
     case actionTypes.FETCH_USERS_SUCCESS:
       return Object.assign({}, state, {
         users: action.payload,
-        isFatching: false,
+        isFetching: false,
       })
+    case actionTypes.FETCH_USERS_FAILURE:
+      return {
+        isFetching: false,
+      }
     case actionTypes.TOGGLE_USER_FORM_OPEN:
       return Object.assign({}, state, {
         registerFormOpen: action.registerFormOpen,
+        user: action.user,
       })
     case actionTypes.UPDATE_USER_FILTER:
       return Object.assign({}, state, {

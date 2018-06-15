@@ -134,6 +134,7 @@ export const fetchTodos = () => {
 }
 
 export const fetchTodosByUserId = (userId, status) => {
+  console.log(userId, status)
   const queryParms = {
     status,
     userId,
@@ -234,6 +235,18 @@ export const deleteTodo = id => {
         })
       }
     )
+  }
+}
+
+export const toggleTodoFormOpen = (isEdit, id, name, description, status) => {
+  console.log('toggleTodoFormOpen', isEdit, id, name, description, status)
+  return {
+    type: actionTypes.TOGGLE_TODO_FORM_OPEN,
+    isEdit,
+    id,
+    name,
+    description,
+    status,
   }
 }
 

@@ -1,84 +1,57 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { Field, reduxForm, propTypes } from 'redux-form'
+import { connect } from 'react-redux'
+import InputField from './InputField'
 
-const propTypes = {
-  onCreate: PropTypes.func,
-  onUpdate: PropTypes.func,
-  isEdit: PropTypes.bool.isRequired,
-  id: PropTypes.number,
-  name: PropTypes.string,
-  description: PropTypes.string,
-  status: PropTypes.string,
-}
-
-const defaultProps = {
-  id: undefined,
-  name: '',
-  description: '',
-  status: '',
-  onCreate: undefined,
-  onUpdate: undefined,
-}
-
-class TodosForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isEdit: this.props.isEdit,
-      id: this.props.isEdit ? this.props.id : undefined,
-      name: this.props.isEdit ? this.props.name : '',
-      description: this.props.isEdit ? this.props.description : '',
-      status: this.props.isEdit ? this.props.status : 'New',
-    }
+const validate = values => {
+  const errors = {}
+  if (!values.name) {
+    errors.name = 'Name is equired'
   }
+  return errors
+}
 
-  onSubmit = e => {
-    e.preventDefault()
-    const { id, name, description, status } = this.state
+const capitalizedValue = value =>
+  value && value.slice(0, 1).toUpperCase() + value.slice(1, value.length)
 
-    if (this.props.isEdit) {
-      this.props.onUpdate(id, name, description, status)
-    } else {
-      this.props.onCreate(name, description)
-      this.setState({
-        name: '',
-        description: '',
-      })
-    }
+class TodoForm extends React.Component {
+  static propTypes = {
+    ...propTypes,
   }
 
   render() {
-    const { description, name, status, isEdit } = this.state
+    const { handleSubmit, isEdit } = this.props
 
     const buttonText = isEdit ? 'Update' : 'Create TODO Item'
     let statusNode
     if (isEdit) {
       statusNode = (
-        <input
-          id="status"
-          placeholder="Status"
-          value={status}
-          onChange={e => this.setState({ status: e.target.value })}
+        <Field
+          type="text"
+          name="status"
+          component={InputField}
+          label="Status"
         />
       )
     }
     return (
       <div>
-        <form onSubmit={this.onSubmit} className="todo-form">
+        <form onSubmit={handleSubmit} className="todo-form">
           <label htmlFor="todoInput">
             New todo
             <div className="todo-form-fields" id="todoInput">
-              <input
-                id="name"
-                placeholder="Name"
-                value={name}
-                onChange={e => this.setState({ name: e.target.value })}
+              <Field
+                type="text"
+                name="name"
+                component={InputField}
+                label="Name"
+                normalize={capitalizedValue}
               />
-              <textarea
-                id="description"
+              <Field
+                name="description"
+                component="textarea"
                 placeholder="Description"
-                onChange={e => this.setState({ description: e.target.value })}
-                value={description}
+                normalize={capitalizedValue}
               />
               {statusNode}
             </div>
@@ -93,6 +66,13 @@ class TodosForm extends React.Component {
   }
 }
 
-TodosForm.propTypes = propTypes
-TodosForm.defaultProps = defaultProps
-export default TodosForm
+TodoForm = reduxForm({
+  form: 'todoForm',
+  validate,
+})(TodoForm)
+
+TodoForm = connect(state => ({
+  initalValues: state.todos.todo,
+}))(TodoForm)
+
+export default TodoForm

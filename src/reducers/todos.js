@@ -1,13 +1,5 @@
 import * as actionTypes from '../constants/actionTypes'
-
-const initialState = {
-  todos: [],
-  currentTodoFilter: 'All',
-  showConfirm: false,
-  isPersistingTodo: false,
-  isEdit: false,
-  error: {},
-}
+import initialState from './initialState'
 
 function todos(state = initialState, action) {
   switch (action.type) {
@@ -44,7 +36,7 @@ function todos(state = initialState, action) {
       })
     case actionTypes.CREATE_TODO_REQUEST:
       return Object.assign({}, state, {
-        isPersistingTodo: true,
+        isSubmiting: true,
       })
     case actionTypes.CREATE_TODO_SUCCESS:
       return Object.assign({}, state, {
@@ -57,11 +49,13 @@ function todos(state = initialState, action) {
             status: action.payload.status,
           },
         ],
-        isPersistingTodo: false,
+        isSubmiting: false,
+        todo: {},
       })
     case actionTypes.CREATE_TODO_FAILURE:
       return Object.assign({}, state, {
         error: action.error,
+        isSubmiting: false,
       })
     case actionTypes.FETCH_TODOS_SUCCESS:
       return Object.assign({}, state, {
@@ -74,6 +68,16 @@ function todos(state = initialState, action) {
     case actionTypes.UPDATE_STATUS_FILTER:
       return Object.assign({}, state, {
         currentTodoFilter: action.status,
+      })
+    case actionTypes.TOGGLE_TODO_FORM_OPEN:
+      return Object.assign({}, state, {
+        todo: {
+          id: action.id,
+          name: action.name,
+          description: action.description,
+          status: action.status,
+        },
+        isEdit: action.isEdit,
       })
     case actionTypes.RESET_TODOS:
       return Object.assign({}, state, {
