@@ -46,11 +46,7 @@ class UserFilter extends React.Component {
   }
 
   handleFilterUpdate = ({ value }) => {
-    console.log(value)
     this.props.updateUserFilter(value)
-
-    console.log(this.props.currentFilter)
-
     const currentUserId = this.getCurrentUserId(value)
     this.props.fetchTodosByUserId(currentUserId, this.props.currentStatus)
   }

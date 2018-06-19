@@ -42,7 +42,6 @@ class TodoView extends React.Component {
     e.preventDefault()
 
     const { id, description, name, status } = this.props
-    console.log(id, name, description, status)
     this.props.toggleTodoFormOpen(true, id, name, description, status)
     this.props.onEdit()
   }
