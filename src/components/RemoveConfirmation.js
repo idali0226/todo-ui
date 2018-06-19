@@ -8,6 +8,7 @@ const propTypes = {
 class RemoveConfirmation extends React.Component {
   constructor() {
     super()
+
     this.state = {
       showConfirm: false,
     }
@@ -16,16 +17,15 @@ class RemoveConfirmation extends React.Component {
     this.toggleConfirmMessage = this.toggleConfirmMessage.bind(this)
   }
 
-  toggleConfirmMessage(event) {
-    event.preventDefault()
-
+  toggleConfirmMessage = e => {
+    e.preventDefault()
     this.setState({
       showConfirm: !this.state.showConfirm,
     })
   }
 
-  confirmDelete(event) {
-    event.preventDefault()
+  confirmDelete = e => {
+    e.preventDefault()
     this.props.onDelete()
   }
 
@@ -49,11 +49,9 @@ class RemoveConfirmation extends React.Component {
         </span>
       )
     }
-
     return <span>{confirmNode}</span>
   }
 }
 
 RemoveConfirmation.propTypes = propTypes
-
 export default RemoveConfirmation

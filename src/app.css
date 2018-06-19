@@ -240,6 +240,10 @@ a:hover {
   min-height: 300px;
 }
 
+.error_text {
+  color: red;
+}
+
 @media screen and (max-width: 800px) {
   .row.comments-container {
     padding-left: 40px;
